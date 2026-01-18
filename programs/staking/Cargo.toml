@@ -1,0 +1,44 @@
+[package]
+name = "staking"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "staking"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = [
+    "anchor-lang/idl-build",
+    "anchor-spl/idl-build",
+    "anchor-spl/token_2022"
+]
+anchor-debug = []     
+custom-heap = []       
+custom-panic = []      
+
+[dependencies]
+anchor-lang = { version = "0.32.1", default-features = false }
+anchor-spl = { version = "0.32.1", default-features = false, features = ["token"] }
+solana-security-txt = "1.1.2"
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+opt-level = "z"
+strip = true
+panic = "abort"
+incremental = false
+
+[profile.release.build-override]
+opt-level = 3
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
